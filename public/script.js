@@ -12,8 +12,10 @@ navigator.mediaDevices.getUserMedia({
   audio: true
 }).then(stream => {
   addVideoStream(myVideo, stream)
+  console.log('get user media')
 
   myPeer.on('call', call => {
+    console.log('peer call')
     call.answer(stream)
     const video = document.createElement('video')
     call.on('stream', userVideoStream => {
@@ -22,6 +24,7 @@ navigator.mediaDevices.getUserMedia({
   })
 
   socket.on('user-connected', userId => {
+    console.log('User connected: ' + userId)
     connectToNewUser(userId, stream)
   })
 })
@@ -31,6 +34,7 @@ socket.on('user-disconnected', userId => {
 })
 
 myPeer.on('open', id => {
+  console.log('peer open')
   socket.emit('join-room', ROOM_ID, id)
 })
 
